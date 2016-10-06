@@ -1,0 +1,19 @@
+vapor:
+  image: meraj/vapor
+  links:
+      - vapor_db:mysql
+  ports: 
+      - 8080:8080
+  expose:
+      - 8080
+  log_driver: json-file
+vapor_db:
+  image: mysql 
+  ports: 
+       - 3366:3306
+  expose:
+       - 3306
+  environment: 
+       - MYSQL_DATABASE=vapordb
+       - MYSQL_USER=vapor
+       - MYSQL_PASSOWRD=vapor 
