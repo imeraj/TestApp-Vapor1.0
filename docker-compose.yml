@@ -6,7 +6,6 @@ vapor:
       - 8080:8080
   expose:
       - 8080
-  log_driver: json-file
 vapor_db:
   image: mysql 
   ports: 
