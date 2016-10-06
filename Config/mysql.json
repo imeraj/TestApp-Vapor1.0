@@ -1,0 +1,8 @@
+{
+    "host": "localhost",
+    "user": "vapor",
+    "password": "vapor",
+    "database": "BIRDSDB",
+    "port": "3306",
+    "encoding": "utf8"
+}
