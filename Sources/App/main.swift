@@ -4,9 +4,11 @@ import VaporMySQL
 let drop = Droplet()
 
 drop.post("sightings") { request in
-    let bird = request.data["bird"]?.string
+    guard let bird = request.data["bird"]?.string else {
+        throw Abort.badRequest
+    }
     
-    let sighting = Sighting(bird: bird!)
+    let sighting = Sighting(bird: bird)
     
     return sighting
 }
