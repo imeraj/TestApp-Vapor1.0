@@ -12,4 +12,10 @@ Join the welcoming community of fellow Vapor developers in [slack](http://vapor.
 
 ## 🔧 Compatibility
 
-This package has been tested on macOS and Ubuntu.
+This package has been tested on macOS.
+
+## Docker build
+- docker build -t meraj/vapor . 
+
+## Docker run
+- docker run -p 8080:8080 -it meraj/vapor
