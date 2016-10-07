@@ -40,12 +40,12 @@ final class SightingConroller: ResourceRepresentable {
         return sighting
     }
     
-    func count(request: Request, item sighting: Sighting) throws -> ResponseRepresentable {
-        let sightings = try Sighting.query().filter("bird", sighting.bird).all()
+    func count(request: Request, item bird: String) throws -> ResponseRepresentable {
+        let sightings = try Sighting.query().filter("bird", bird).all()
         
         return JSON([
             "count": Node(sightings.count)
-            ])
+        ])
     }
     
     func makeResource() -> Resource<Sighting> {

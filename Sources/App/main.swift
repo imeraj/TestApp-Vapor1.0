@@ -5,18 +5,11 @@ import Foundation
 let drop = Droplet(preparations: [Sighting.self], providers: [VaporMySQL.Provider.self])
 
 let sightings = SightingConroller(droplet: drop)
-drop.resource("sightings", sightings)
 
-drop.post("sightings") { request in
-    return try sightings.store(request: request)
-}
+drop.post("sightings", handler: sightings.store)
 
-drop.get("sightings") { request in
-    return try sightings.index(request: request)
-}
-
-drop.get("sightings", Sighting.self) { request, sighting in
-    return try sightings.show(request: request, item: sighting)
-}
+drop.get("sightings", handler: sightings.index)
+drop.get("sightings", Sighting.self, handler: sightings.show)
+drop.get("sightings", String.self, "count", handler: sightings.count)
 
 drop.run()
