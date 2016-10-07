@@ -1,5 +1,6 @@
 import Vapor
 import VaporMySQL
+import Foundation
 
 let drop = Droplet(preparations: [Sighting.self], providers: [VaporMySQL.Provider.self])
 
@@ -11,12 +12,16 @@ drop.post("sightings") { request in
     let response = try drop.client.get("http://ebird.org/ws1.1/ref/taxon/find", query: [
         "q" : bird ])
     
-    guard let _ = response.data[0, "name"]?.string else {
-        throw Abort.custom(
-             status: .badRequest,
-             message: "Bird \(bird) was not found")
-    }
+    let birds = response.data["name"]?
+            .array?
+            .flatMap({ $0.string })
     
+    if birds == nil || birds?.count == 0 {
+            throw Abort.custom(
+                status: .badRequest,
+                message: "Bird \(bird) was not found")
+    }
+
     var sighting = Sighting(bird: bird)
     try sighting.save()
     
