@@ -7,6 +7,7 @@ final class Sighting: Model {
     var id: Node?
     var bird: String
     var time: Int
+    var exists: Bool = false
     
     init(bird: String, time: Double) {
         self.bird = bird;
@@ -34,7 +35,7 @@ final class Sighting: Model {
     static func prepare(_ database: Database) throws {
         try database.create("sightings") { sightings in
             sightings.id()
-            sightings.string("bird")
+            sightings.string("bird", optional: false)
             sightings.int("time")
         }
     }
