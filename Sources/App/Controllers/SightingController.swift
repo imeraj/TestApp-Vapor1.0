@@ -17,7 +17,9 @@ final class SightingConroller: ResourceRepresentable {
             throw Abort.badRequest
         }
         
-        let response = try drop.client.get("http://ebird.org/ws1.1/ref/taxon/find", query: [
+        let find_bird_url = drop.config["app", "birds_apis", 0, "find_bird_url"]?.string ?? ""
+        
+        let response = try drop.client.get(find_bird_url, query: [
             "q" : bird ])
         
         let birds = response.data["name"]?

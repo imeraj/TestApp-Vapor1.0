@@ -1,3 +1,5 @@
 {
-	"key": "default-key"
+    "birds_apis" : [
+                    {"find_bird_url": "http://ebird.org/ws1.1/ref/taxon/find"}
+    ]
 }
