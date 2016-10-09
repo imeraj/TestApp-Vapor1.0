@@ -1,20 +1,28 @@
 import Vapor
 import HTTP
+import SwiftyBeaverVapor
+import SwiftyBeaver
 
 final class SightingConroller: ResourceRepresentable {
     let drop: Droplet
+    let log: SwiftyBeaverVapor
     
     init(droplet: Droplet) {
         self.drop = droplet
+        self.log = droplet.log as! SwiftyBeaverVapor
     }
     
     func index(request: Request) throws -> ResponseRepresentable {
+        log.debug("Request: \(request.headers)")
+       
         return try Sighting.all().makeNode().converted(to: JSON.self)
     }
     
     func store(request: Request) throws -> ResponseRepresentable {
+        log.debug("Request: \(request.headers)")
+        
         guard let bird = request.data["bird"]?.string else {
-            throw Abort.badRequest
+            throw SightingError.malformedSightingRequest
         }
         
         let find_bird_url = drop.config["app", "birds_apis", 0, "find_bird_url"]?.string ?? ""
@@ -27,9 +35,7 @@ final class SightingConroller: ResourceRepresentable {
             .flatMap({ $0.string })
         
         if birds == nil || birds?.count == 0 {
-            throw Abort.custom(
-                status: .badRequest,
-                message: "Bird \(bird) was not found")
+            throw SightingError.noSuchBird
         }
         
         var sighting = Sighting(bird: bird)
@@ -39,10 +45,14 @@ final class SightingConroller: ResourceRepresentable {
     }
     
     func show(request: Request, item sighting: Sighting) throws -> ResponseRepresentable {
+        log.debug("Request: \(request.headers)")
+        
         return sighting
     }
     
     func count(request: Request, item bird: String) throws -> ResponseRepresentable {
+        log.debug("Request: \(request.headers)")
+        
         let sightings = try Sighting.query().filter("bird", bird).all()
         
         return JSON([
