@@ -2,6 +2,7 @@ import Vapor
 import HTTP
 import SwiftyBeaverVapor
 import SwiftyBeaver
+import Auth
 
 final class SightingConroller: ResourceRepresentable {
     let drop: Droplet
@@ -20,7 +21,7 @@ final class SightingConroller: ResourceRepresentable {
     
     func store(request: Request) throws -> ResponseRepresentable {
         log.debug("Request: \(request.headers)")
-        
+
         guard let bird = request.data["bird"]?.string else {
             throw SightingError.malformedSightingRequest
         }

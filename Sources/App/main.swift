@@ -6,6 +6,19 @@ import SwiftyBeaverVapor
 import SwiftyBeaver
 import Sessions
 import Hash
+import Auth
+import Cookies
+
+// Create authentication middleware
+let auth = AuthMiddleware(user: User.self) { value in
+    return Cookie(
+        name: "vapor-auth",
+        value: value,
+        expires: Date().addingTimeInterval(60 * 60 * 5), // 5 hours
+        secure: true,
+        httpOnly: true
+    )
+}
 
 // Initialize middlewares/providers
 let console = ConsoleDestination()
@@ -13,7 +26,8 @@ let sbProvider = SwiftyBeaverProvider(destinations: [console])
 
 var middleware: [String: Middleware]? = [
     "sighting": SightingErrorMiddleware(),
-    "sessions" : SessionsMiddleware(sessions: MemorySessions())
+    "sessions" : SessionsMiddleware(sessions: MemorySessions()),
+    "auth": AuthMiddleware(user: User.self)
 ]
 
 // Initialize Droplet
@@ -60,6 +74,16 @@ drop.get("remember") { request in
     }
     
     return name
+}
+
+// login API
+drop.post("login") { request in
+    guard let credentials = request.auth.header?.basic else {
+        throw Abort.badRequest
+    }
+    
+    try request.auth.login(credentials)
+    throw Abort.custom(status: .ok, message: "Logged in successfully!")
 }
 
 drop.run()

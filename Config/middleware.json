@@ -6,7 +6,8 @@
         "type-safe",
         "date",
         "sessions",
-        "sighting"
+        "sighting",
+        "auth"
     ],
     "client": [
         
