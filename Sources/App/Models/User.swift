@@ -72,7 +72,7 @@ extension User: Auth.User {
         }
         
         guard let u = user else {
-            throw UserError.noSuchUSer
+            throw UserError.invalidCredentials
         }
         
         return u

@@ -8,7 +8,6 @@ enum SightingError: Error {
 
 enum UserError: Error {
     case userExists
-    case noSuchUSer
     case invalidCredentials
 }
 
@@ -38,11 +37,6 @@ final class UserErrorMiddleware: Middleware {
             return Response(
                 status: .ok,
                 body: "User exists - password updated!"
-            )
-        } catch UserError.noSuchUSer {
-            return Response(
-                status: .badRequest,
-                body: "User not found!"
             )
         } catch UserError.invalidCredentials {
             return Response(

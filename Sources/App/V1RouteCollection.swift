@@ -11,7 +11,7 @@ final class V1RouteCollection: RouteCollection {
     init(_ droplet: Droplet) {
         self.drop = droplet
         
-        let error = Abort.custom(status: .forbidden, message: "Invalid credentials.")
+        let error = Abort.custom(status: .forbidden, message: "Please login first!")
         protect = ProtectMiddleware(error: error)
     }
     
