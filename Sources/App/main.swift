@@ -12,7 +12,7 @@ var middleware: [String: Middleware]? = [
     "sighting": SightingErrorMiddleware()
 ]
 
-let drop = Droplet(availableMiddleware: middleware, serverMiddleware: ["sighting"], preparations: [Sighting.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
+let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
 let log = drop.log.self
 
 
