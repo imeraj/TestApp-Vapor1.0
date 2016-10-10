@@ -79,6 +79,31 @@ extension User: Auth.User {
     }
     
     static func register(credentials: Credentials) throws -> Auth.User {
-        throw Abort.custom(status: .badRequest, message: "Register not supported.")
+        var registeredUser: User?
+        
+        switch credentials {
+        case let apiKey as APIKey:
+            let username = apiKey.id
+            let password = apiKey.secret
+            
+            let hashedPassword = try Hash.make(Hash.Method.sha512, Array(password.utf8))
+            var user = User(username: username, password: String(describing: (hashedPassword, encoding: String.Encoding.utf8)))
+            
+            let tempUser = try User.query().filter("username", username).first()
+            
+            if var u = tempUser {
+                u.password = user.password
+                try u.save()
+                throw Abort.custom(status: .ok, message: "User exists - password updated!")
+            } else {
+                try user.save()
+                registeredUser = user
+            }
+        
+        default:
+                throw Abort.custom(status: .badRequest, message: "Registration failed!")
+        }
+    
+       return registeredUser!
     }
 }

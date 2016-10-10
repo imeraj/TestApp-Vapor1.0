@@ -34,22 +34,6 @@ var middleware: [String: Middleware]? = [
 let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self, User.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
 let log = drop.log.self
 
-// Initialize default user and passowrd
-let username = drop.config["dbseeds", "User", 0, "username"]?.string
-let password = drop.config["dbseeds", "User", 0, "password"]?.string
-
-let hashedPassword = try Hash.make(Hash.Method.sha512, Array(password!.utf8))
-var user = User(username: username!, password: String(describing: (hashedPassword, encoding: String.Encoding.utf8)))
-
-var adminUser = try User.query().filter("username", username!).first()
-
-if var admin = adminUser {
-    admin.password = user.password
-    try admin.save()
-} else {
-    try user.save()
-}
-
 // Register routes using RouteCollection and Group
 drop.collection(V1RouteCollection(drop))
 
@@ -83,7 +67,18 @@ drop.post("login") { request in
     }
     
     try request.auth.login(credentials)
+    
     throw Abort.custom(status: .ok, message: "Logged in successfully!")
+}
+
+drop.post("register") { request in
+    guard let credentials = request.auth.header?.basic else {
+        throw Abort.badRequest
+    }
+    
+    _ = try User.register(credentials: credentials)
+    
+    throw Abort.custom(status: .ok, message: "Registration successful!")
 }
 
 drop.run()
