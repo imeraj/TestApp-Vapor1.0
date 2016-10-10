@@ -68,11 +68,11 @@ extension User: Auth.User {
             let hashedPassword = String(describing: (hashedSecret, encoding: String.Encoding.utf8))
             user = try User.query().filter("username", apiKey.id).filter("password", hashedPassword).first()
         default:
-            throw Abort.custom(status: .badRequest, message: "Invalid credentials.")
+            throw Abort.custom(status: .badRequest, message: "Invalid credentials!")
         }
         
         guard let u = user else {
-            throw Abort.custom(status: .badRequest, message: "User not found")
+            throw Abort.custom(status: .badRequest, message: "User not found!")
         }
         
         return u

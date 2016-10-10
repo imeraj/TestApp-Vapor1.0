@@ -68,7 +68,7 @@ drop.post("login") { request in
     
     try request.auth.login(credentials)
     
-    throw Abort.custom(status: .ok, message: "Logged in successfully!")
+    throw Abort.custom(status: .ok, message: "Login successful!")
 }
 
 drop.post("register") { request in
