@@ -19,20 +19,10 @@ var middleware: [String: Middleware]? = [
 let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
 let log = drop.log.self
 
-// Initialize controller
-let sightings = SightingConroller(droplet: drop)
-
-
-// Initialize Route Groups
-drop.group("v1") { v1 in
-
-    v1.post("sightings", handler: sightings.store)
-
-    v1.get("sightings", handler: sightings.index)
-    v1.get("sightings", Sighting.self, handler: sightings.show)
-    v1.get("sightings", String.self, "count", handler: sightings.count)
-}
+// Register routes using RouteCollection and Group
+drop.collection(V1RouteCollection(drop))
     
+
 if drop.environment == .development {
     log.info("API registration done!")
 }
