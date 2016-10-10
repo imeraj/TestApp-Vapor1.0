@@ -6,6 +6,12 @@ enum SightingError: Error {
     case malformedSightingRequest
 }
 
+enum UserError: Error {
+    case userExists
+    case noSuchUSer
+    case invalidCredentials
+}
+
 final class SightingErrorMiddleware: Middleware {
     func respond(to request: Request, chainingTo next: Responder) throws -> Response {
         do {
@@ -19,6 +25,29 @@ final class SightingErrorMiddleware: Middleware {
             return Response(
                 status: .badRequest,
                 body: "Bird \((request.data["bird"]?.string)!) does not exist!"
+            )
+        }
+    }
+}
+
+final class UserErrorMiddleware: Middleware {
+    func respond(to request: Request, chainingTo next: Responder) throws -> Response {
+        do {
+            return try next.respond(to: request)
+        } catch UserError.userExists {
+            return Response(
+                status: .ok,
+                body: "User exists - password updated!"
+            )
+        } catch UserError.noSuchUSer {
+            return Response(
+                status: .badRequest,
+                body: "User not found!"
+            )
+        } catch UserError.invalidCredentials {
+            return Response(
+                status: .badRequest,
+                body: "Invalid credentials!"
             )
         }
     }

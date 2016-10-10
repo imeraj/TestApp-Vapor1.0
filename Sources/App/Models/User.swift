@@ -68,11 +68,11 @@ extension User: Auth.User {
             let hashedPassword = String(describing: (hashedSecret, encoding: String.Encoding.utf8))
             user = try User.query().filter("username", apiKey.id).filter("password", hashedPassword).first()
         default:
-            throw Abort.custom(status: .badRequest, message: "Invalid credentials!")
+            throw UserError.invalidCredentials
         }
         
         guard let u = user else {
-            throw Abort.custom(status: .badRequest, message: "User not found!")
+            throw UserError.noSuchUSer
         }
         
         return u
@@ -94,14 +94,14 @@ extension User: Auth.User {
             if var u = tempUser {
                 u.password = user.password
                 try u.save()
-                throw Abort.custom(status: .ok, message: "User exists - password updated!")
+                throw UserError.userExists
             } else {
                 try user.save()
                 registeredUser = user
             }
         
         default:
-                throw Abort.custom(status: .badRequest, message: "Registration failed!")
+                throw UserError.invalidCredentials
         }
     
        return registeredUser!
