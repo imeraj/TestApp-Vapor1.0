@@ -6,6 +6,7 @@ import SwiftyBeaverVapor
 import SwiftyBeaver
 import Sessions
 
+// Initialize middlewares/providers
 let console = ConsoleDestination()
 let sbProvider = SwiftyBeaverProvider(destinations: [console])
 
@@ -14,18 +15,24 @@ var middleware: [String: Middleware]? = [
     "sessions" : SessionsMiddleware(sessions: MemorySessions())
 ]
 
+// Initialize Droplet
 let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
 let log = drop.log.self
 
-
+// Initialize controller
 let sightings = SightingConroller(droplet: drop)
 
-drop.post("sightings", handler: sightings.store)
 
-drop.get("sightings", handler: sightings.index)
-drop.get("sightings", Sighting.self, handler: sightings.show)
-drop.get("sightings", String.self, "count", handler: sightings.count)
+// Initialize Route Groups
+drop.group("v1") { v1 in
 
+    v1.post("sightings", handler: sightings.store)
+
+    v1.get("sightings", handler: sightings.index)
+    v1.get("sightings", Sighting.self, handler: sightings.show)
+    v1.get("sightings", String.self, "count", handler: sightings.count)
+}
+    
 if drop.environment == .development {
     log.info("API registration done!")
 }
