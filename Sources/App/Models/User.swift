@@ -2,6 +2,7 @@ import Vapor
 import Node
 import HTTP
 import Foundation
+import Auth
 
 final class User: Model {
     var id: Node?
@@ -40,12 +41,22 @@ final class User: Model {
         try database.create("Users") { users in
             users.id()
             users.string("username")
-            users.string("password")
+            users.string("password", length: 512)
             users.int("timestamp")
         }
     }
     
     static func revert(_ database: Database) throws {
         try database.delete("Users")
+    }
+}
+
+extension User: Auth.User {
+    static func authenticate(credentials: Credentials) throws -> Auth.User {
+        throw Abort.custom(status: .badRequest, message: "Authentication not supported.")
+    }
+    
+    static func register(credentials: Credentials) throws -> Auth.User {
+        throw Abort.custom(status: .badRequest, message: "Register not supported.")
     }
 }
