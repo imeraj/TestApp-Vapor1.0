@@ -5,6 +5,7 @@ import Foundation
 import SwiftyBeaverVapor
 import SwiftyBeaver
 import Sessions
+import Hash
 
 // Initialize middlewares/providers
 let console = ConsoleDestination()
@@ -16,7 +17,7 @@ var middleware: [String: Middleware]? = [
 ]
 
 // Initialize Droplet
-let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
+let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self, User.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
 let log = drop.log.self
 
 // Register routes using RouteCollection and Group

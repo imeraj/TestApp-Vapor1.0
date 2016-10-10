@@ -10,12 +10,12 @@ final class Sighting: Model {
     var exists: Bool = false
     
     init(bird: String, time: Double) {
-        self.bird = bird;
+        self.bird = bird
         self.time = Int(time)
     }
     
     convenience init(bird: String) {
-        self.init(bird:bird, time: NSDate().timeIntervalSince1970.doubleValue)
+        self.init(bird: bird, time: NSDate().timeIntervalSince1970.doubleValue)
     }
     
     init(node: Node, in context: Context) throws {
@@ -33,7 +33,7 @@ final class Sighting: Model {
     }
     
     static func prepare(_ database: Database) throws {
-        try database.create("sightings") { sightings in
+        try database.create("Sightings") { sightings in
             sightings.id()
             sightings.string("bird", optional: false)
             sightings.int("time")
@@ -41,7 +41,7 @@ final class Sighting: Model {
     }
         
     static func revert(_ database: Database) throws {
-        try database.delete("sightings")
+        try database.delete("Sightings")
     }
 }
 
