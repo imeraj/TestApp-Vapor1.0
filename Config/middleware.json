@@ -5,7 +5,6 @@
         "validation",
         "type-safe",
         "date",
-        "sessions",
         "sighting",
         "auth",
         "user"
