@@ -1,5 +1,6 @@
 import Vapor
 import HTTP
+import Auth
 
 enum SightingError: Error {
     case noSuchBird
@@ -8,7 +9,7 @@ enum SightingError: Error {
 
 enum UserError: Error {
     case userExists
-    case invalidCredentials
+    case noSuchUser
 }
 
 final class SightingErrorMiddleware: Middleware {
@@ -38,10 +39,28 @@ final class UserErrorMiddleware: Middleware {
                 status: .ok,
                 body: "User exists - password updated!"
             )
-        } catch UserError.invalidCredentials {
+        } catch UserError.noSuchUser {
+            return Response(
+                status: .badRequest,
+                body: "User does not exist!"
+            )
+        }
+    }
+}
+
+final class AuthErrorMiddleware : Middleware {
+    func respond(to request: Request, chainingTo next: Responder) throws -> Response {
+        do {
+            return try next.respond(to: request)
+        } catch AuthError.invalidCredentials {
             return Response(
                 status: .badRequest,
                 body: "Invalid credentials!"
+            )
+        } catch AuthError.notAuthenticated {
+            return Response(
+                status: .badRequest,
+                body: "User not logged in!"
             )
         }
     }

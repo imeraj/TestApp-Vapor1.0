@@ -72,6 +72,16 @@ drop.post("login") { request in
     throw Abort.custom(status: .ok, message: "Login successful!")
 }
 
+drop.get("logout") { request in
+    guard let user = try request.auth.user() as? User else {
+        throw UserError.noSuchUser
+    }
+    
+    try request.auth.logout()
+    
+    throw Abort.custom(status: .ok, message: "Logout successful!")
+}
+
 drop.post("register") { request in
     guard let credentials = request.auth.header?.basic else {
         throw Abort.badRequest

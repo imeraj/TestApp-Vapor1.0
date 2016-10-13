@@ -68,11 +68,11 @@ extension User: Auth.User {
             let hashedPassword = String(describing: (hashedSecret, encoding: String.Encoding.utf8))
             user = try User.query().filter("username", apiKey.id).filter("password", hashedPassword).first()
         default:
-            throw UserError.invalidCredentials
+            throw AuthError.invalidCredentials
         }
         
         guard let u = user else {
-            throw UserError.invalidCredentials
+            throw AuthError.invalidCredentials
         }
         
         return u
@@ -101,7 +101,7 @@ extension User: Auth.User {
             }
         
         default:
-                throw UserError.invalidCredentials
+                throw AuthError.invalidCredentials
         }
     
        return registeredUser!
