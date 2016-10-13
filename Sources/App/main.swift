@@ -4,21 +4,9 @@ import VaporMySQL
 import Foundation
 import SwiftyBeaverVapor
 import SwiftyBeaver
-import Sessions
 import Hash
 import Auth
 import Cookies
-
-// Create authentication middleware
-let auth = AuthMiddleware(user: User.self) { value in
-    return Cookie(
-        name: "vapor-auth",
-        value: value,
-        expires: Date().addingTimeInterval(60 * 60 * 5), // 5 hours
-        secure: true,
-        httpOnly: true
-    )
-}
 
 // Initialize middlewares/providers
 let console = ConsoleDestination()
@@ -47,16 +35,20 @@ if drop.environment == .development {
 
 // login API
 drop.post("login") { request in
+    log.debug("Request: \(request.headers)")
+    
     guard let credentials = request.auth.header?.basic else {
         throw Abort.badRequest
     }
     
-    try request.auth.login(credentials)
+    try request.auth.login(credentials, persist: true)
     
     throw Abort.custom(status: .ok, message: "Login successful!")
 }
 
 drop.get("logout") { request in
+    log.debug("Request: \(request.headers)")
+    
     guard let user = try request.auth.user() as? User else {
         throw UserError.noSuchUser
     }
@@ -67,6 +59,8 @@ drop.get("logout") { request in
 }
 
 drop.post("register") { request in
+    log.debug("Request: \(request.headers)")
+    
     guard let credentials = request.auth.header?.basic else {
         throw Abort.badRequest
     }
