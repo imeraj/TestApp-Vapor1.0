@@ -49,6 +49,9 @@ drop.post("login") { request in
 drop.get("logout") { request in
     log.debug("Request: \(request.headers)")
     
+    // workaround for strage cookie set during logout: remove cookies from request 
+    request.cookies.removeAll()
+    
     guard let user = try request.auth.user() as? User else {
         throw UserError.noSuchUser
     }
