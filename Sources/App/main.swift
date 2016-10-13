@@ -35,6 +35,9 @@ var middleware: [String: Middleware]? = [
 let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self, User.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
 let log = drop.log.self
 
+User.database = drop.database
+Sighting.database = drop.database
+
 // Register routes using RouteCollection and Group
 drop.collection(V1RouteCollection(drop))
 
