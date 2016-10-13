@@ -45,25 +45,6 @@ if drop.environment == .development {
     log.info("API registration done!")
 }
 
-// session test api
-//drop.post("remember") { request in
-//    guard let name = request.data["name"]?.string else {
-//        throw Abort.badRequest
-//    }
-//    
-//    try request.session().data["name"] = Node.string(name)
-//    
-//    return "Remebered name."
-//}
-//
-//drop.get("remember") { request in
-//    guard let name = try request.session().data["name"]?.string else {
-//        throw Abort.custom(status: .badRequest, message: "Please POST the name first.")
-//    }
-//    
-//    return name
-//}
-
 // login API
 drop.post("login") { request in
     guard let credentials = request.auth.header?.basic else {
