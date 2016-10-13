@@ -25,9 +25,9 @@ let console = ConsoleDestination()
 let sbProvider = SwiftyBeaverProvider(destinations: [console])
 
 var middleware: [String: Middleware]? = [
-    "sighting": SightingErrorMiddleware(),
-    "user": UserErrorMiddleware(),
-   // "sessions" : SessionsMiddleware(sessions: MemorySessions()),
+    "sighting_error": SightingErrorMiddleware(),
+    "user_error": UserErrorMiddleware(),
+    "auth_error": AuthErrorMiddleware(),
     "auth": AuthMiddleware(user: User.self)
 ]
 
