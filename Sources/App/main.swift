@@ -43,7 +43,7 @@ drop.post("login") { request in
     
     try request.auth.login(credentials, persist: true)
     
-    throw Abort.custom(status: .ok, message: "Login successful!")
+    return JSON(["message": "Login successful!"])
 }
 
 drop.get("logout") { request in
@@ -55,7 +55,7 @@ drop.get("logout") { request in
     
     try request.auth.logout()
     
-    throw Abort.custom(status: .ok, message: "Logout successful!")
+    return JSON(["message": "Logout successful!"])
 }
 
 drop.post("register") { request in
@@ -67,7 +67,7 @@ drop.post("register") { request in
     
     _ = try User.register(credentials: credentials)
     
-    throw Abort.custom(status: .ok, message: "Registration successful!")
+    return JSON(["message": "Registration successful!"])
 }
 
 drop.run()
