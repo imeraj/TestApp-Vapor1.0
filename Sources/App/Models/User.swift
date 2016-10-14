@@ -88,6 +88,11 @@ extension User: Auth.User {
         
         switch credentials {
         case let apiKey as APIKey:
+            _ = try apiKey.id.validated(by: OnlyAlphanumeric.self && Count.min(3)
+                && Count.max(15))
+            _ = try apiKey.secret.validated(by: Count.min(5)
+                && Count.max(10))
+            
             let username = apiKey.id
             let password = apiKey.secret
             
