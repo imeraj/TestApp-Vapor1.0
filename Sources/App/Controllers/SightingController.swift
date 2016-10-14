@@ -11,6 +11,7 @@ final class SightingConroller: ResourceRepresentable {
     init(droplet: Droplet) {
         self.drop = droplet
         self.log = droplet.log as! SwiftyBeaverVapor
+
     }
     
     func index(request: Request) throws -> ResponseRepresentable {

@@ -23,17 +23,18 @@ var middleware: [String: Middleware]? = [
 
 // Initialize Droplet
 let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self, User.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
-let log = drop.log.self
+var log = drop.log.self
+
+if drop.environment == .production {
+    drop.log.enabled = [LogLevel.error]
+}
 
 User.database = drop.database
 Sighting.database = drop.database
 
 // Register routes using RouteCollection and Group
 drop.collection(V1RouteCollection(drop))
-
-if drop.environment == .development {
-    log.info("API registration done!")
-}
+log.info("API registration done!")
 
 // login API
 drop.post("login") { request in
