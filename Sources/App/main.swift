@@ -13,11 +13,12 @@ let console = ConsoleDestination()
 let sbProvider = SwiftyBeaverProvider(destinations: [console])
 
 var middleware: [String: Middleware]? = [
-    "sighting_error": SightingErrorMiddleware(),
-    "user_error": UserErrorMiddleware(),
-    "auth_error": AuthErrorMiddleware(),
+    "sighting-error": SightingErrorMiddleware(),
+    "user-error": UserErrorMiddleware(),
+    "auth-error": AuthErrorMiddleware(),
     "auth": AuthMiddleware(user: User.self),
-    "logout": LogoutMiddleware()
+    "logout": LogoutMiddleware(),
+    "validation-error": ValidationErrorMiddleware()
 ]
 
 // Initialize Droplet
