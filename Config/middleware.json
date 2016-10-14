@@ -8,7 +8,8 @@
         "sighting_error",
         "auth_error",
         "user_error",
-        "auth"
+        "auth",
+        "logout"
     ],
     "client": [
         

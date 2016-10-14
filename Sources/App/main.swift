@@ -16,7 +16,8 @@ var middleware: [String: Middleware]? = [
     "sighting_error": SightingErrorMiddleware(),
     "user_error": UserErrorMiddleware(),
     "auth_error": AuthErrorMiddleware(),
-    "auth": AuthMiddleware(user: User.self)
+    "auth": AuthMiddleware(user: User.self),
+    "logout": LogoutMiddleware()
 ]
 
 // Initialize Droplet
