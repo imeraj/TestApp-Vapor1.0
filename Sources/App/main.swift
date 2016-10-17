@@ -13,25 +13,28 @@ let console = ConsoleDestination()
 let sbProvider = SwiftyBeaverProvider(destinations: [console])
 
 var middleware: [String: Middleware]? = [
-    "sighting_error": SightingErrorMiddleware(),
-    "user_error": UserErrorMiddleware(),
-    "auth_error": AuthErrorMiddleware(),
-    "auth": AuthMiddleware(user: User.self)
+    "sighting-error": SightingErrorMiddleware(),
+    "user-error": UserErrorMiddleware(),
+    "auth-error": AuthErrorMiddleware(),
+    "auth": AuthMiddleware(user: User.self),
+    "logout": LogoutMiddleware(),
+    "validation-error": ValidationErrorMiddleware()
 ]
 
 // Initialize Droplet
 let drop = Droplet(availableMiddleware: middleware, preparations: [Sighting.self, User.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
-let log = drop.log.self
+var log = drop.log.self
+
+if drop.environment == .production {
+    drop.log.enabled = [LogLevel.error]
+}
 
 User.database = drop.database
 Sighting.database = drop.database
 
 // Register routes using RouteCollection and Group
 drop.collection(V1RouteCollection(drop))
-
-if drop.environment == .development {
-    log.info("API registration done!")
-}
+log.info("API registration done!")
 
 drop.get("/") { request in
     try drop.view.make("welcome")

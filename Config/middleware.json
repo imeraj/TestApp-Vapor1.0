@@ -5,10 +5,12 @@
         "validation",
         "type-safe",
         "date",
-        "sighting_error",
-        "auth_error",
-        "user_error",
-        "auth"
+        "sighting-error",
+        "auth-error",
+        "user-error",
+        "auth",
+        "logout",
+        "validation-error"
     ],
     "client": [
         

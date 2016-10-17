@@ -4,6 +4,7 @@ import HTTP
 import Foundation
 import Auth
 import Hash
+import BCrypt
 
 final class User: Model {
     var id: Node?
@@ -64,18 +65,22 @@ extension User: Auth.User {
             user = try User.query().filter("access_token", accessToken.string).first()
             // process here
         case let apiKey as APIKey:
-            let hashedSecret = try Hash.make(Hash.Method.sha512, Array(apiKey.secret.utf8))
-            let hashedPassword = String(describing: (hashedSecret, encoding: String.Encoding.utf8))
-            user = try User.query().filter("username", apiKey.id).filter("password", hashedPassword).first()
+            user = try User.query().filter("username", apiKey.id).first()
+            
+            guard user != nil else {
+                throw UserError.noSuchUser
+            }
+            
+            let matched = try BCrypt.verify(password: apiKey.secret, matchesHash: (user?.password)!)
+            if matched == false {
+                    throw AuthError.invalidCredentials
+            }
+            
         default:
             throw AuthError.invalidCredentials
         }
         
-        guard let u = user else {
-            throw AuthError.invalidCredentials
-        }
-        
-        return u
+        return user!
     }
     
     static func register(credentials: Credentials) throws -> Auth.User {
@@ -83,11 +88,26 @@ extension User: Auth.User {
         
         switch credentials {
         case let apiKey as APIKey:
+            
+            do {
+                _ = try apiKey.id.validated(by: OnlyAlphanumeric.self && Count.min(3)
+                && Count.max(15))
+            } catch _ as ValidationErrorProtocol {
+                throw ValidationError.invalidUser
+            }
+            
+            do {
+                _ = try apiKey.secret.validated(by: Count.min(5)
+                && Count.max(10))
+            } catch _ as ValidationErrorProtocol {
+                throw ValidationError.invalidPass
+            }
+            
             let username = apiKey.id
             let password = apiKey.secret
             
-            let hashedPassword = try Hash.make(Hash.Method.sha512, Array(password.utf8))
-            var user = User(username: username, password: String(describing: (hashedPassword, encoding: String.Encoding.utf8)))
+            let encryptedPass = BCrypt.hash(password: password)
+            var user = User(username: username, password: encryptedPass)
             
             let tempUser = try User.query().filter("username", username).first()
             

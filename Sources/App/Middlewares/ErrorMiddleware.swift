@@ -12,6 +12,11 @@ enum UserError: Error {
     case noSuchUser
 }
 
+enum ValidationError: Error {
+    case invalidUser
+    case invalidPass
+}
+
 final class SightingErrorMiddleware: Middleware {
     func respond(to request: Request, chainingTo next: Responder) throws -> Response {
         do {
@@ -63,5 +68,39 @@ final class AuthErrorMiddleware : Middleware {
                 body: "User not logged in!"
             )
         }
+    }
+}
+
+final class ValidationErrorMiddleware : Middleware {
+    func respond(to request: Request, chainingTo next: Responder) throws -> Response {
+        do {
+            return try next.respond(to: request)
+        } catch ValidationError.invalidPass {
+            return Response(
+                status: .badRequest,
+                body: "Invalid password!"
+            )
+        } catch ValidationError.invalidUser {
+            return Response(
+                status: .badRequest,
+                body: "Invalid username!"
+            )
+        }
+    }
+}
+
+final class LogoutMiddleware : Middleware {
+    func respond(to request: Request, chainingTo next: Responder) throws -> Response {
+            let response = try next.respond(to: request)
+        
+            if response.headers.index(forKey: "Set-Cookie") != nil {
+                if (response.headers["Set-Cookie"]?.isEmpty)! {
+                    response.headers.removeValue(forKey: "Set-Cookie")
+                }
+            }
+        
+            print("\(response)")
+        
+            return response
     }
 }
