@@ -33,6 +33,10 @@ if drop.environment == .development {
     log.info("API registration done!")
 }
 
+drop.get("/") { request in
+    try drop.view.make("welcome")
+}
+
 // login API
 drop.post("login") { request in
     log.debug("Request: \(request.headers)")
