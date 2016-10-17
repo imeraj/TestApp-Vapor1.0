@@ -29,3 +29,21 @@ final class V1RouteCollection: RouteCollection {
         v1.get("sightings", String.self, "count", handler: sightings.count)
     }
 }
+
+final class LoginRouteCollection: RouteCollection {
+    typealias Wrapped = HTTP.Responder
+    let drop: Droplet
+   
+    init(_ droplet: Droplet) {
+        self.drop = droplet
+    }
+    
+    func build<Builder: RouteBuilder>(_ builder: Builder) where Builder.Value == Wrapped {
+        // Initialize controller
+        let auth = AuthController(droplet: drop)
+        
+        builder.post("login", handler: auth.login)
+        builder.get("logout", handler: auth.logout)
+        builder.post("register", handler: auth.register)
+    }
+}
