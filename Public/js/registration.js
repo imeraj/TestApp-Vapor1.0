@@ -18,17 +18,21 @@ $(document).ready(function() {
                        crossDomain: true,
 
                        dataType: "json",
-                       success: function (data, status, jqXHR) {
-                      console.log(data);
-                         alert("success");// write success in " "
+                        success: function (data, status, jqXHR) {
+
+                            console.log(data.message)
+                            console.log(jqXHR.responseText)
+                            location.href = '/login';
+
                        },
                        beforeSend: function (xhr) {
-                           xhr.setRequestHeader ("Authorization", "Basic " + btoa(data.username + ":" + data.password));
+                           xhr.setRequestHeader ("Authorization", "Basic " + btoa(data.userName + ":" + data.password));
+
                        },
                        error: function (jqXHR, status) {
                            // error handler
-                           console.log(jqXHR);
-                           alert('fail' + status.code);
+                           console.log(jqXHR.responseText);
+                          // alert('fail' + status.code);
                        }
                    });
 
