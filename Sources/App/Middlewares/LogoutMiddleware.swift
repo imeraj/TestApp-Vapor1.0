@@ -11,8 +11,7 @@ final class LogoutMiddleware : Middleware {
                     response.headers.removeValue(forKey: "Set-Cookie")
                 }
             }
-        
-            print("\(response)")
+
             return response
     }
 }
