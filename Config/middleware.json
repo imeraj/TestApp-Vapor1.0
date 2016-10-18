@@ -9,8 +9,8 @@
         "auth-error",
         "user-error",
         "auth",
-        "logout",
-        "validation-error"
+        "validation-error",
+        "logout"
     ],
     "client": [
         
