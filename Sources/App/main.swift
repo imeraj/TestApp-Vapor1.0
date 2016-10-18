@@ -39,5 +39,8 @@ log.info("API registration done!")
 drop.get("/") { request in
     try drop.view.make("signup.html")
 }
+drop.get("/login") { request in
+    try drop.view.make("login.html")
+}
 
 drop.run()
