@@ -37,7 +37,7 @@ drop.collection(LoginRouteCollection(drop))
 log.info("API registration done!")
 
 drop.get("/") { request in
-    try drop.view.make("welcome")
+    try drop.view.make("signup.html")
 }
 
 drop.run()
