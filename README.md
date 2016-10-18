@@ -14,3 +14,6 @@ Join the welcoming community of fellow Vapor developers in [slack](http://vapor.
 
 This package has been tested on macOS.
 
+## UP and Running Project
+1.swiftenv install https://swift.org/builds/development/xcode/swift-DEVELOPMENT-SNAPSHOT-2016-08-18-a/swift-DEVELOPMENT-SNAPSHOT-2016-08-18-a-osx.pkg
+2. swift package generate-xcodeproj -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib -Xswiftc -DNOJSON
