@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Bird Culture</title>
+        <meta name="robots" content="noindex, nofollow">
+            <!-- Include CSS File Here -->
+
+
+            <link rel="stylesheet" href="styles/register.css"/>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+            <!-- Include JS File Here -->
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script type="text/javascript" src="js/logout.js"></script>
+
+  <script type="text/javascript">
+  $(document).ready(function() {
+               $("#showbirds").click(function() {
+                  $.ajax({
+                       type: "GET",
+                       url: "/v1/sightings",
+                       // data: JSON.stringify(data),
+                       contentType: "application/json; charset=utf-8",
+                       crossDomain: true,
+                       dataType: "json",
+
+                       success: function (data, status, jqXHR) {
+
+                         console.log(data)
+                         //var dataJSON = JSON.parse(data);
+                         var dataJSON= jQuery.parseJSON(JSON.stringify(data));
+                         markup = '';
+                         for (var i = 0; i < dataJSON.length; i++) {
+                           markup += '<tr><td class="order_id">' + dataJSON[i].bird +  dataJSON[i].time + '</td></tr>';
+                         }
+                         $('#orderTable tbody').html(markup)
+
+                       },
+                       error: function (jqXHR, status) {
+                       // error handler
+                           var message = jqXHR.responseText;
+                           alert(message);
+                           console.log(jqXHR.responseText);
+
+                       }
+                       });
+          });
+});
+</script>
+
+  </head>
+  <body>
+
+
+            <div class="panel-body"  >
+                <div class="container">
+                    <div class="card card-container">
+                        <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+                        <p id="profile-name" class="profile-name-card"></p>
+                        <form class="form-signin" method="post" action="#"  >
+                            <span id="reauth-email" class="reauth-email"></span>
+                            <input type="text" id="bird" class="form-control" placeholder="Birdname"  required autofocus>
+                              <input type="button" class="btn btn-lg btn-primary btn-block btn-signin" name="register" id="addbird" value="Insert">
+                                    </form><!-- /form -->
+                    </div><!-- /card-container -->
+                </div><!-- /container -->
+
+            </div>
+
+        <input type="button" class="btn btn-primary btn-logout" name="register" id="logout" value="Logout">
+
+
+       <input type="button" class="btn btn-primary name="register" id="showbirds" value="Show BirdList">
+           <table id=orderTable cellspacing="0" cellpadding="0">
+           <thead>
+        </thead>
+           <tbody>
+           </tbody>
+           </table>
+
+       </body>
+</html>
