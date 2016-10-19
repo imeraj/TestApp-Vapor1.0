@@ -11,7 +11,7 @@
         "user-error",
         "auth",
         "validation-error",
-        "logout"
+        "response"
     ],
     "client": [
         

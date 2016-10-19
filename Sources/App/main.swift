@@ -26,7 +26,7 @@ drop.addConfigurable(middleware: SightingErrorMiddleware(), name: "sighting-erro
 drop.addConfigurable(middleware: UserErrorMiddleware(), name: "user-error")
 drop.addConfigurable(middleware: AuthMiddleware(user: User.self), name: "auth")
 drop.addConfigurable(middleware: ValidationErrorMiddleware(), name: "validation-error")
-drop.addConfigurable(middleware: LogoutMiddleware(), name: "logout")
+drop.addConfigurable(middleware: ResponseMiddleware(), name: "response")
 
 var log = drop.log.self
 
