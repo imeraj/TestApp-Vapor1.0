@@ -29,7 +29,7 @@
                          var dataJSON= jQuery.parseJSON(JSON.stringify(data));
                          markup = '';
                          for (var i = 0; i < dataJSON.length; i++) {
-                           markup += '<tr><td class="order_id">' + dataJSON[i].bird +  dataJSON[i].time + '</td></tr>';
+                         markup += '<tr><td class="order_id">'+ dataJSON[i].bird +'</td><td>' +dataJSON[i].date +'</td></tr>';
                          }
                          $('#orderTable tbody').html(markup)
 
@@ -68,11 +68,18 @@
         <input type="button" class="btn btn-primary btn-logout" name="register" id="logout" value="Logout">
 
 
-       <input type="button" class="btn btn-primary name="register" id="showbirds" value="Show BirdList">
-           <table id=orderTable cellspacing="0" cellpadding="0">
+       <input type="button" class="btn btn-primary name="register" id="showbirds" value="Show Sighted Birds">
+
+       <table id=orderTable >
            <thead>
-        </thead>
+           <tr>
+           <th>Birdname</th>
+           <th>Sighted Time</th>
+           </tr>           
+           </thead>
            <tbody>
+
+
            </tbody>
            </table>
 

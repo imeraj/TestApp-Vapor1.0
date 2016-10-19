@@ -16,6 +16,9 @@ body, html {
     user-select: none;
     cursor: default;
 }
+thead {color:green;}
+tbody {color:blue;}
+tfoot {color:red;}
 
 /*
  * Card component
