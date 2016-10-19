@@ -3,6 +3,7 @@ import HTTP
 import SwiftyBeaverVapor
 import SwiftyBeaver
 import Auth
+import Foundation
 
 final class AuthController: ResourceRepresentable {
     let drop: Droplet
@@ -21,7 +22,9 @@ final class AuthController: ResourceRepresentable {
         }
     
         try request.auth.login(credentials, persist: true)
-    
+        
+        try request.session().data["timestamp"] = Node(Int(NSDate().timeIntervalSince1970.doubleValue))
+        
         return JSON(["message": "Login successful!"])
     }
 
@@ -29,6 +32,7 @@ final class AuthController: ResourceRepresentable {
         log.debug("Request: \(request.headers)")
     
         // workaround for strage cookie set during logout: remove cookies from request 
+        try request.session().destroy()
         request.cookies.removeAll()
     
         guard let _ = try request.auth.user() as? User else {

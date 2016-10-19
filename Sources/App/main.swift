@@ -6,6 +6,7 @@ import SwiftyBeaverVapor
 import SwiftyBeaver
 import Hash
 import Auth
+import Sessions
 
 // Initialize middlewares/providers
 let console = ConsoleDestination()
@@ -14,8 +15,8 @@ let sbProvider = SwiftyBeaverProvider(destinations: [console])
 // Initialize Droplet
 let drop = Droplet(preparations: [Sighting.self, User.self], providers: [VaporMySQL.Provider.self], initializedProviders: [sbProvider])
 
-
 // as workaround of framework bug, we add all middlewares here
+drop.addConfigurable(middleware: SessionsMiddleware(sessions: MemorySessions()), name: "sessions")
 drop.addConfigurable(middleware: AbortMiddleware(), name: "abort")
 drop.addConfigurable(middleware: DateMiddleware(), name: "date")
 drop.addConfigurable(middleware: TypeSafeErrorMiddleware(), name: "type-safe")
