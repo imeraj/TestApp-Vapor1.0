@@ -28,7 +28,8 @@ final class Sighting: Model {
         return try Node(node: [
             "id": id,
             "bird": bird,
-            "time": time
+            "time": time,
+            "date": DateFormatter.localizedString(from: NSDate(timeIntervalSince1970:TimeInterval(time)) as Date, dateStyle: .short, timeStyle: .short)
             ])
     }
     
