@@ -12,6 +12,7 @@ final class ResponseMiddleware : Middleware {
                 }
             }
 
+            print("\(response)")
             return response
     }
 }
