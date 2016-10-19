@@ -23,9 +23,11 @@ $(document).ready(function() {
                        dataType: "json",
                         success: function (data, status, jqXHR) {
                             console.log(data);
+                            location.href = '/birds';
                       },
                       error: function (jqXHR, status) {
                            // error handler
+                      alert(jqXHR.responseText);
                            console.log(jqXHR.responseText);
 
                        }
