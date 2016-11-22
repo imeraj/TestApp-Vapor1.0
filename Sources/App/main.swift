@@ -37,13 +37,21 @@ if drop.environment == .production {
 User.database = drop.database
 Sighting.database = drop.database
 
-// Register routes 
+// Register routes
 drop.collection(V1RouteCollection(drop))
 drop.collection(LoginRouteCollection(drop))
 log.info("API registration done!")
 
 drop.get("/") { request in
-    return try drop.view.make("welcome")
+    try drop.view.make("signup.html")
+}
+
+drop.get("/login") { request in
+    try drop.view.make("login.html")
+}
+
+drop.get("/birds") { request in
+    try drop.view.make("birds.html")
 }
 
 drop.run()
